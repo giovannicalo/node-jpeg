@@ -3,7 +3,7 @@ const { join } = require("path");
 
 const { Format, decode, encode } = require("../source");
 
-const iterations = 1000;
+const iterations = 100;
 
 const path = join(__dirname, "..", "test");
 
