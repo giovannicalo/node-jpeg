@@ -61,10 +61,20 @@ const { Format, encode } = require("jpeg");
         height: 1080,
         width: 1920
     };
-    const jpeg = await encode(rgba, 90);
-    console.log(jpeg);
+    const rgbaJpeg = await encode(rgba, 90);
+    console.log(rgbaJpeg);
     // <Buffer ...>
-    await writeFile("foo.jpg", jpeg);
+    await writeFile("foo.jpg", rgbaJpeg);
+    const yuv = {
+        data: await readFile("foo.yuv"),
+        format: Format.yuv,
+        height: 1080,
+        width: 1920
+    };
+    const yuvJpeg = await encode(yuv, 90);
+    console.log(yuvJpeg);
+    // <Buffer ...>
+    await writeFile("bar.jpg", yuvJpeg);
 })();
 ```
 
