@@ -15,3 +15,12 @@ interface Image {
  * @returns {Promise<Image>} A promise resolving to the decoded image.
  */
 export function decode(data: Buffer, format = Format.rgba): Promise<Image>
+
+/**
+ * Encodes a raw image as JPEG.
+ *
+ * @param {Image} image - An image.
+ * @param {Number} [quality=90] - The desired output quality, between 0 and 100, defaults to 90.
+ * @returns {Promise<Buffer>} A promise resolving to the encoded buffer.
+ */
+export function encode(image: Image, quality = 90): Promise<Buffer>
