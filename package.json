@@ -1,0 +1,44 @@
+{
+	"author": {
+		"email": "giovanni.calo@live.it",
+		"name": "Giovanni Calò",
+		"url": "https://github.com/giovannicalo"
+	},
+	"bugs": {
+		"url": "https://github.com/giovannicalo/node-jpeg/issues"
+	},
+	"dependencies": {
+		"bindings": "^1.5.0",
+		"cmake-js": "^6.2.1",
+		"node-addon-api": "^4.0.0",
+		"unzipper": "^0.10.11"
+	},
+	"description": "JPEG",
+	"devDependencies": {
+		"eslint": "^7.32.0",
+		"eslint-config-giovanni": "giovannicalo/eslint-config",
+		"jest": "^27.0.6"
+	},
+	"engines": {
+		"node": "^16.5.0"
+	},
+	"homepage": "https://github.com/giovannicalo/node-jpeg",
+	"keywords": ["decode", "encode", "i420", "jpeg", "jpeg-turbo", "jpg", "libjpeg-turbo", "native", "raw", "rgba", "yuv", "yuv420"],
+	"license": "MIT",
+	"main": "source/index.js",
+	"name": "jpeg",
+	"private": true,
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/giovannicalo/node-jpeg.git"
+	},
+	"scripts": {
+		"build": "cmake-js compile",
+		"build-debug": "cmake-js compile --debug",
+		"install": "node scripts/install && npm run build",
+		"lint": "eslint -f pretty .",
+		"start": "jest --watch",
+		"test": "jest"
+	},
+	"version": "0.0.0"
+}

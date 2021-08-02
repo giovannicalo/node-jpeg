@@ -1,0 +1,15 @@
+.editorconfig
+.eslintignore
+.eslintrc.js
+.gitattributes
+.github
+.gitignore
+.npmignore
+.vscode
+**/*.spec.js
+build
+coverage
+jest.config.js
+jsconfig.json
+libraries
+test
