@@ -80,7 +80,7 @@ Standard RGBA format, supports both decoding and encoding.
 
 Value: 1
 
-YUV I420 format, currently supports only decoding. Smaller and faster than RGBA, but less straightforward. When the source JPEG image has odd dimensions, they will be rounded up to the nearest even number.
+YUV I420 format, supports both decoding and encoding. Smaller and faster than RGBA, but less straightforward. When decoding, if the source JPEG has odd dimensions, they will be rounded up to the nearest even number. Currently, decoding only works if the JPEG already has YUV colorspace and 4:2:0 subsampling.
 
 ### `decode(data: Buffer, format = Format.rgba): Promise<Image>`
 
@@ -90,6 +90,6 @@ Returns a promise resolving to an object with `data`, `height`, `format` and `wi
 
 ### `encode(image: Image, quality = 90): Promise<Buffer>`
 
-Encodes a raw `image` as JPEG with the given `quality`. `image` must be an object with `data`, `height`, `format` and `width` properties. `image.format` currently has to be `Format.rgba`.
+Encodes a raw `image` as JPEG with the given `quality`. `image` must be an object with `data`, `height`, `format` and `width` properties.
 
 Returns a promise resolving to a buffer.

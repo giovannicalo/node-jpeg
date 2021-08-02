@@ -48,8 +48,20 @@ namespace nodeJpeg {
 				SetError("[nodeJpeg::Encoder::Execute] Failed to encode");
 			}
 		} else if (image->format == Format::yuv) {
-			// TODO: Support YUV
-			SetError("[nodeJpeg::Encoder::Execute] Encoding YUV images is not yet supported");
+			if (tjCompressFromYUV(
+				handle,
+				image->data,
+				image->width,
+				1,
+				image->height,
+				TJSAMP_420,
+				&buffer,
+				reinterpret_cast<unsigned long*>(&size),
+				quality,
+				0
+			)) {
+				SetError("[nodeJpeg::Encoder::Execute] Failed to encode");
+			}
 		} else {
 			SetError("[nodeJpeg::Encoder::Execute] Format is invalid");
 		}
