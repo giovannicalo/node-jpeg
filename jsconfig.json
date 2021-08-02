@@ -1,0 +1,9 @@
+{
+	"compilerOptions": {
+		"checkJs": true,
+		"experimentalDecorators": true,
+		"module": "commonjs",
+		"target": "es2020"
+	},
+	"exclude": ["node_modules"]
+}
