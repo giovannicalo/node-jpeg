@@ -1,0 +1,35 @@
+jobs:
+  build:
+    name: Build
+    runs-on: ${{matrix.os}}
+    steps:
+    - name: Install Node
+      uses: actions/setup-node@v2.3.0
+      with:
+        node-version: 16.5.0
+    - name: Configure Git
+      run: git config --global core.autocrlf input
+    - name: Checkout code
+      uses: actions/checkout@v2.3.4
+    - name: Install dependencies
+      run: npm install --no-save
+    - name: Lint
+      run: npm run lint
+    - name: Test
+      run: npm test
+    - if: ${{matrix.os == 'ubuntu-20.04'}}
+      name: Test coverage
+      uses: coverallsapp/github-action@1.1.3
+      with:
+        github-token: ${{secrets.GITHUB_TOKEN}}
+    strategy:
+      matrix:
+        os:
+        - macos-10.15
+        - ubuntu-20.04
+        - windows-2019
+name: Build
+on:
+- pull_request
+- push
+- workflow_dispatch
