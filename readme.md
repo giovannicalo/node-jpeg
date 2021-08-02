@@ -26,6 +26,15 @@ const { Format, decode } = require("jpeg");
 
 (async () => {
     const jpeg = await readFile("foo.jpg");
+    const rgba = await decode(jpeg, Format.rgba);
+    console.log(rgba);
+    // {
+    //   data: Uint8ClampedArray(8294400) [...],
+    //   format: 0,
+    //   height: 1080,
+    //   width: 1920
+    // }
+    await writeFile("foo.rgba", rgba.data);
     const yuv = await decode(jpeg, Format.yuv);
     console.log(yuv);
     // {
@@ -44,7 +53,7 @@ const { Format, decode } = require("jpeg");
 
 Value: 0
 
-Standard RGBA format, currently unused.
+Standard RGBA format, currently supports only decoding.
 
 ### `Format.yuv`
 
@@ -54,6 +63,6 @@ YUV I420 format, currently supports only decoding. Smaller and faster than RGBA,
 
 ### `decode(data: Buffer, format = Format.rgba): Promise<Image>`
 
-Decodes the JPEG image stored in the `data` buffer as `format`, which currently has to be `Format.yuv`.
+Decodes the JPEG image stored in the `data` buffer as `format`, which can be either `Format.rgba` or `Format.yuv`.
 
 Returns a promise resolving to an object with `data`, `height`, `format` and `width` properties.

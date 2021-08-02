@@ -9,9 +9,29 @@ const jpeg511 = readFileSync(join(path, "511x511.jpg"));
 
 const jpeg512 = readFileSync(join(path, "512x512.jpg"));
 
+const rgba511 = readFileSync(join(path, "511x511.rgba"));
+
+const rgba512 = readFileSync(join(path, "512x512.rgba"));
+
 const yuv511 = readFileSync(join(path, "511x511.yuv"));
 
 const yuv512 = readFileSync(join(path, "512x512.yuv"));
+
+it("should decode an even-sized JPEG as RGBA", async () => {
+	const decoded = await decode(jpeg512, Format.rgba);
+	expect(Buffer.from(decoded.data).equals(rgba512)).toBeTruthy();
+	expect(decoded.format).toBe(Format.rgba);
+	expect(decoded.height).toBe(512);
+	expect(decoded.width).toBe(512);
+});
+
+it("should decode an odd-sized JPEG as RGBA", async () => {
+	const decoded = await decode(jpeg511, Format.rgba);
+	expect(Buffer.from(decoded.data).equals(rgba511)).toBeTruthy();
+	expect(decoded.format).toBe(Format.rgba);
+	expect(decoded.height).toBe(511);
+	expect(decoded.width).toBe(511);
+});
 
 it("should decode an even-sized JPEG as YUV", async () => {
 	const decoded = await decode(jpeg512, Format.yuv);
@@ -51,6 +71,6 @@ it("should throw when given a format that isn't RGBA or YUV", () => {
 
 it("shouldn't throw when given more than two arguments", () => {
 	expect(() => {
-		decode(jpeg512, Format.yuv, 42);
+		decode(jpeg512, Format.rgba, 42);
 	}).not.toThrow();
 });

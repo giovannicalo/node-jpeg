@@ -52,7 +52,7 @@ namespace nodeJpeg {
 			// TODO: Support odd dimensions
 			height = (height + 1) & ~1;
 			width = (width + 1) & ~1;
-			uint32_t size = tjBufSizeYUV2(width, 1, height, TJSAMP_420);
+			uint64_t size = tjBufSizeYUV2(width, 1, height, TJSAMP_420);
 			image = new Image(Format::yuv, width, height, size);
 			std::memset(image->data, 0, size);
 			if (tjDecompressToYUV2(
@@ -69,8 +69,23 @@ namespace nodeJpeg {
 				delete image;
 			}
 		} else if (format == Format::rgba) {
-			// TODO: Support RGBA
-			SetError("[nodeJpeg::Decoder::Execute] Decoding to RGBA is not yet supported");
+			uint32_t pitch = width * 4;
+			uint64_t size = pitch * height;
+			image = new Image(Format::rgba, width, height, size);
+			if (tjDecompress2(
+				handle,
+				source.Data(),
+				source.ByteLength(),
+				image->data,
+				width,
+				pitch,
+				height,
+				TJPF_RGBA,
+				0
+			)) {
+				SetError("[nodeJpeg::Decoder::Execute] Failed to decode");
+				delete image;
+			}
 		} else {
 			SetError("[nodeJpeg::Decoder::Execute] Format is invalid");
 		}
