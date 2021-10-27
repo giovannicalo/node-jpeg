@@ -10,17 +10,17 @@
 	"dependencies": {
 		"bindings": "^1.5.0",
 		"cmake-js": "^6.2.1",
-		"node-addon-api": "^4.0.0",
+		"node-addon-api": "^4.2.0",
 		"unzipper": "^0.10.11"
 	},
 	"description": "JPEG",
 	"devDependencies": {
 		"eslint": "^7.32.0",
 		"eslint-config-giovanni": "giovannicalo/eslint-config",
-		"jest": "^27.0.6"
+		"jest": "^27.3.1"
 	},
 	"engines": {
-		"node": "^16.5.0"
+		"node": "^17.0.1"
 	},
 	"homepage": "https://github.com/giovannicalo/node-jpeg",
 	"keywords": ["decode", "encode", "i420", "jpeg", "jpeg-turbo", "jpg", "libjpeg-turbo", "native", "raw", "rgba", "yuv", "yuv420"],
