@@ -1,1 +1,6 @@
-module.exports = { extends: ["giovanni/library", "giovanni/node"] };
+module.exports = {
+	extends: [
+		"giovanni/library",
+		"giovanni/node"
+	]
+};
