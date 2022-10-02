@@ -80,26 +80,22 @@ const { Format, encode } = require("jpeg");
 
 ## API
 
-### `Format.rgba`
+### `Format.rgba = 0`
 
-Value: 0
+Standard RGBA format.
 
-Standard RGBA format, supports both decoding and encoding.
+### `Format.yuv = 1`
 
-### `Format.yuv`
+YUV I420 format. Smaller and faster than RGBA, but less straightforward. When decoding, if the source JPEG has odd dimensions, they will be rounded up to the nearest even number. Currently, decoding only works if the JPEG already has YUV colorspace and 4:2:0 subsampling.
 
-Value: 1
+### `decode(data: Buffer, format: Format = Format.rgba): Promise<Image>`
 
-YUV I420 format, supports both decoding and encoding. Smaller and faster than RGBA, but less straightforward. When decoding, if the source JPEG has odd dimensions, they will be rounded up to the nearest even number. Currently, decoding only works if the JPEG already has YUV colorspace and 4:2:0 subsampling.
-
-### `decode(data: Buffer, format = Format.rgba): Promise<Image>`
-
-Decodes the JPEG image stored in the `data` buffer as `format`, which can be either `Format.rgba` or `Format.yuv`.
+Decodes the JPEG image stored in the `data` `Buffer` as `format`, which can be either `Format.rgba` or `Format.yuv`.
 
 Returns a promise resolving to an object with `data`, `height`, `format` and `width` properties.
 
-### `encode(image: Image, quality = 90): Promise<Buffer>`
+### `encode(image: Image, quality: number = 90): Promise<Buffer>`
 
 Encodes a raw `image` as JPEG with the given `quality`. `image` must be an object with `data`, `height`, `format` and `width` properties.
 
-Returns a promise resolving to a buffer.
+Returns a promise resolving to a `Buffer`.
