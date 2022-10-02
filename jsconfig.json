@@ -3,7 +3,7 @@
 		"checkJs": true,
 		"experimentalDecorators": true,
 		"module": "CommonJS",
-		"target": "ES2021"
+		"target": "ES2022"
 	},
-	"exclude": ["node_modules"]
+	"exclude": ["build", "coverage", "libraries", "node_modules"]
 }
