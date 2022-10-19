@@ -24,11 +24,11 @@ const yuv = {
 };
 
 const benchmark = async (label, method, ...parameters) => {
-	const start = Date.now();
+	const start = performance.now();
 	for (let i = 0; i < iterations; i++) {
 		await method(...parameters);
 	}
-	console.log(`${label}: ${((Date.now() - start) / iterations).toFixed(2)}ms`);
+	console.log(`${label}: ${((performance.now() - start) / iterations).toFixed(2)}ms`);
 };
 
 (async () => {
