@@ -52,21 +52,25 @@ it("should decode an odd-sized JPEG as YUV", async () => {
 it("should throw when given no arguments", () => {
 	expect(() => {
 		decode();
-	}).toThrow();
+	}).toThrow("[nodeJpeg::decode] At least one argument is required");
 });
 
 it("should throw when the first argument is not a buffer", () => {
 	expect(() => {
 		decode(42);
-	}).toThrow();
+	}).toThrow("[nodeJpeg::decode] Argument is not a buffer");
 });
 
-it("should throw when given a buffer that isn't a JPEG", () => {
-	return expect(decode(Buffer.from([1, 2, 3]))).rejects.toThrow();
+it("should throw when given a buffer that isn't a JPEG", async () => {
+	await expect(
+		decode(Buffer.from([1, 2, 3]))
+	).rejects.toThrow("[nodeJpeg::Decoder::Execute] Failed to read header");
 });
 
-it("should throw when given a format that isn't RGBA or YUV", () => {
-	return expect(decode(jpeg512, 42)).rejects.toThrow();
+it("should throw when given a format that isn't RGBA or YUV", async () => {
+	await expect(
+		decode(jpeg512, 42)
+	).rejects.toThrow("[nodeJpeg::Decoder::Execute] Format is invalid");
 });
 
 it("shouldn't throw when given more than two arguments", () => {

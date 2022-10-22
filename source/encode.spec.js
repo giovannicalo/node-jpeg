@@ -54,13 +54,13 @@ it("should encode an odd-sized YUV image as JPEG", async () => {
 it("should throw when given no arguments", () => {
 	expect(() => {
 		encode();
-	}).toThrow();
+	}).toThrow("[nodeJpeg::encode] At least one argument is required");
 });
 
 it("should throw when the first argument is not an object", () => {
 	expect(() => {
 		encode(42);
-	}).toThrow();
+	}).toThrow("[nodeJpeg::decode] Argument is not an object");
 });
 
 it("shouldn't throw when given more than two arguments", () => {
