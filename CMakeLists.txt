@@ -21,7 +21,7 @@ ExternalProject_Add(
 	BUILD_COMMAND cmake --build . --config ${CMAKE_BUILD_TYPE} --target turbojpeg-static
 	CMAKE_ARGS -DCMAKE_POSITION_INDEPENDENT_CODE=ON
 	GIT_REPOSITORY "https://github.com/libjpeg-turbo/libjpeg-turbo.git"
-	GIT_TAG "2.1.5.1"
+	GIT_TAG "3.0.1"
 	INSTALL_COMMAND ""
 )
 

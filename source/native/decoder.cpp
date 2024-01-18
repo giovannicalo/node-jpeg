@@ -12,56 +12,49 @@ nodeJpeg::Decoder::Decoder(
 {}
 
 void nodeJpeg::Decoder::Execute() {
-	tjhandle handle = tjInitDecompress();
+	tjhandle handle = tj3Init(TJINIT_DECOMPRESS);
 	if (!handle) {
 		SetError("[nodeJpeg::Decoder::Execute] Failed to initialize");
 		return;
 	}
-	int32_t colorspace = 0;
-	int32_t height = 0;
-	int32_t subsampling = 0;
-	int32_t width = 0;
-	if (tjDecompressHeader3(
+	if (tj3DecompressHeader(
 		handle,
 		source.Data(),
-		source.ByteLength(),
-		&width,
-		&height,
-		&subsampling,
-		&colorspace
+		source.ByteLength()
 	)) {
 		SetError("[nodeJpeg::Decoder::Execute] Failed to read header");
-		tjDestroy(handle);
+		tj3Destroy(handle);
 		return;
 	};
+	int32_t height = tj3Get(handle, TJPARAM_JPEGHEIGHT);
+	int32_t width = tj3Get(handle, TJPARAM_JPEGWIDTH);
 	if (format == Format::yuv) {
+		int32_t colorspace = tj3Get(handle, TJPARAM_COLORSPACE);
 		// TODO: Support other colorspaces
 		if (colorspace != TJCS_YCbCr) {
 			SetError("[nodeJpeg::Decoder::Execute] Input image colorspace is not YUV");
-			tjDestroy(handle);
+			tj3Destroy(handle);
 			return;
 		}
+		int32_t subsampling = tj3Get(handle, TJPARAM_SUBSAMP);
 		// TODO: Support other subsamplings
 		if (subsampling != TJSAMP_420) {
 			SetError("[nodeJpeg::Decoder::Execute] Input image subsampling is not 4:2:0");
-			tjDestroy(handle);
+			tj3Destroy(handle);
 			return;
 		}
 		// TODO: Support odd dimensions
 		height = (height + 1) & ~1;
 		width = (width + 1) & ~1;
-		uint64_t size = tjBufSizeYUV2(width, 1, height, TJSAMP_420);
+		uint64_t size = tj3YUVBufSize(width, 1, height, subsampling);
 		image = new Image(Format::yuv, width, height, size);
 		std::memset(image->data, 0, size);
-		if (tjDecompressToYUV2(
+		if (tj3DecompressToYUV8(
 			handle,
 			source.Data(),
 			source.ByteLength(),
 			image->data,
-			width,
-			1,
-			height,
-			0
+			1
 		)) {
 			SetError("[nodeJpeg::Decoder::Execute] Failed to decode");
 			delete image;
@@ -70,16 +63,13 @@ void nodeJpeg::Decoder::Execute() {
 		uint32_t pitch = width * 4;
 		uint64_t size = pitch * height;
 		image = new Image(Format::rgba, width, height, size);
-		if (tjDecompress2(
+		if (tj3Decompress8(
 			handle,
 			source.Data(),
 			source.ByteLength(),
 			image->data,
-			width,
 			pitch,
-			height,
-			TJPF_RGBA,
-			0
+			TJPF_RGBA
 		)) {
 			SetError("[nodeJpeg::Decoder::Execute] Failed to decode");
 			delete image;
@@ -87,7 +77,7 @@ void nodeJpeg::Decoder::Execute() {
 	} else {
 		SetError("[nodeJpeg::Decoder::Execute] Format is invalid");
 	}
-	tjDestroy(handle);
+	tj3Destroy(handle);
 }
 
 void nodeJpeg::Decoder::OnError(const Napi::Error& error) {

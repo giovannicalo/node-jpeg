@@ -24,13 +24,15 @@ nodeJpeg::Encoder::~Encoder() {
 }
 
 void nodeJpeg::Encoder::Execute() {
-	tjhandle handle = tjInitCompress();
+	tjhandle handle = tj3Init(TJINIT_COMPRESS);
 	if (!handle) {
 		SetError("[nodeJpeg::Encoder::Execute] Failed to initialize");
 		return;
 	}
+	tj3Set(handle, TJPARAM_QUALITY, quality);
+	tj3Set(handle, TJPARAM_SUBSAMP, TJSAMP_420);
 	if (image->format == Format::rgba) {
-		if (tjCompress2(
+		if (tj3Compress8(
 			handle,
 			image->data,
 			image->width,
@@ -38,32 +40,26 @@ void nodeJpeg::Encoder::Execute() {
 			image->height,
 			TJPF_RGBA,
 			&buffer,
-			reinterpret_cast<unsigned long*>(&size),
-			TJSAMP_420,
-			quality,
-			0
+			reinterpret_cast<size_t*>(&size)
 		)) {
 			SetError("[nodeJpeg::Encoder::Execute] Failed to encode");
 		}
 	} else if (image->format == Format::yuv) {
-		if (tjCompressFromYUV(
+		if (tj3CompressFromYUV8(
 			handle,
 			image->data,
 			image->width,
 			1,
 			image->height,
-			TJSAMP_420,
 			&buffer,
-			reinterpret_cast<unsigned long*>(&size),
-			quality,
-			0
+			reinterpret_cast<size_t*>(&size)
 		)) {
 			SetError("[nodeJpeg::Encoder::Execute] Failed to encode");
 		}
 	} else {
 		SetError("[nodeJpeg::Encoder::Execute] Format is invalid");
 	}
-	tjDestroy(handle);
+	tj3Destroy(handle);
 }
 
 void nodeJpeg::Encoder::OnError(const Napi::Error& error) {
@@ -76,7 +72,7 @@ void nodeJpeg::Encoder::OnOK() {
 		buffer,
 		size,
 		[](Napi::Env, void* data) {
-			tjFree(static_cast<unsigned char*>(data));
+			tj3Free(static_cast<unsigned char*>(data));
 		}
 	));
 }
