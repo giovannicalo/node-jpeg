@@ -10,7 +10,6 @@
 	"dependencies": {
 		"bindings": "^1.5.0",
 		"cmake-js": "7.3.0",
-		"extract-zip": "^2.0.1",
 		"node-addon-api": "^7.0.0"
 	},
 	"description": "JPEG",
@@ -35,7 +34,7 @@
 		"benchmark": "node scripts/benchmark",
 		"build": "cmake-js compile",
 		"build-debug": "cmake-js compile --debug",
-		"install": "node scripts/install && npm run build",
+		"install": "npm run build",
 		"lint": "eslint -f pretty .",
 		"start": "jest --watch",
 		"test": "jest"

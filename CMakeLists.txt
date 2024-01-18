@@ -12,9 +12,18 @@ if(MSVC)
 	set(WITH_CRT_DLL FALSE)
 endif()
 
-include_directories(${CMAKE_JS_INC})
-
 add_definitions(-DNAPI_VERSION=8)
+
+include(ExternalProject)
+
+ExternalProject_Add(
+	jpeg
+	BUILD_COMMAND cmake --build . --config ${CMAKE_BUILD_TYPE} --target turbojpeg-static
+	CMAKE_ARGS -DCMAKE_POSITION_INDEPENDENT_CODE=ON
+	GIT_REPOSITORY "https://github.com/libjpeg-turbo/libjpeg-turbo.git"
+	GIT_TAG "2.1.5.1"
+	INSTALL_COMMAND ""
+)
 
 file(GLOB_RECURSE source "source/native/*")
 
@@ -30,10 +39,16 @@ execute_process(
 
 string(REGEX REPLACE "[\n\r\"]" "" nodeAddonApi ${nodeAddonApi})
 
-option(ENABLE_SHARED "" FALSE)
+ExternalProject_Get_Property(jpeg BINARY_DIR SOURCE_DIR)
 
-add_subdirectory("libraries/libjpeg-turbo" EXCLUDE_FROM_ALL)
+target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_JS_INC} ${nodeAddonApi} ${SOURCE_DIR})
 
-target_include_directories(${PROJECT_NAME} PRIVATE ${nodeAddonApi} "libraries/libjpeg-turbo")
+target_link_directories(${PROJECT_NAME} PRIVATE ${BINARY_DIR})
 
-target_link_libraries(${PROJECT_NAME} ${CMAKE_JS_LIB} turbojpeg-static)
+if(MSVC)
+	set(jpeg "turbojpeg-static")
+else()
+	set(jpeg "turbojpeg")
+endif()
+
+target_link_libraries(${PROJECT_NAME} ${CMAKE_JS_LIB} ${jpeg})
