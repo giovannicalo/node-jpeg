@@ -1,14 +1,13 @@
+**/*.spec.js
 .editorconfig
-.eslintignore
-.eslintrc.js
 .gitattributes
 .github
 .gitignore
 .npmignore
 .vscode
-**/*.spec.js
 build
 coverage
+eslint.config.js
 jest.config.js
 jsconfig.json
 test
