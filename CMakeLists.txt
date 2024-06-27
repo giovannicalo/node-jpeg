@@ -25,7 +25,7 @@ ExternalProject_Add(
 	CMAKE_ARGS -DCMAKE_POSITION_INDEPENDENT_CODE=ON
 	GIT_REPOSITORY "https://github.com/libjpeg-turbo/libjpeg-turbo.git"
 	GIT_SHALLOW TRUE
-	GIT_TAG "3.0.1"
+	GIT_TAG "3.0.3"
 	INSTALL_COMMAND ""
 )
 
