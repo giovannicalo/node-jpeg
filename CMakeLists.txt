@@ -25,13 +25,15 @@ ExternalProject_Add(
 	CMAKE_ARGS -DCMAKE_POSITION_INDEPENDENT_CODE=ON
 	GIT_REPOSITORY "https://github.com/libjpeg-turbo/libjpeg-turbo.git"
 	GIT_SHALLOW TRUE
-	GIT_TAG "3.0.3"
+	GIT_TAG "3.1.0"
 	INSTALL_COMMAND ""
 )
 
 file(GLOB_RECURSE source "source/native/*")
 
 add_library(${PROJECT_NAME} SHARED ${source} ${CMAKE_JS_SRC})
+
+add_dependencies(${PROJECT_NAME} jpegProject)
 
 set_target_properties(${PROJECT_NAME} PROPERTIES PREFIX "" SUFFIX ".node")
 
@@ -45,7 +47,7 @@ string(REGEX REPLACE "[\n\r\"]" "" nodeAddonApi ${nodeAddonApi})
 
 ExternalProject_Get_Property(jpegProject BINARY_DIR SOURCE_DIR)
 
-target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_JS_INC} ${nodeAddonApi} ${SOURCE_DIR})
+target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_JS_INC} ${nodeAddonApi} ${SOURCE_DIR}/src)
 
 target_link_directories(${PROJECT_NAME} PRIVATE ${BINARY_DIR})
 
