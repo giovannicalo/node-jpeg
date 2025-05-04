@@ -14,7 +14,7 @@
 	},
 	"description": "JPEG",
 	"devDependencies": {
-		"eslint": "^9.25.1",
+		"eslint": "^9.26.0",
 		"eslint-config-giovanni": "giovannicalo/eslint-config",
 		"jest": "^29.7.0"
 	},
